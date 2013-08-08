@@ -1,4 +1,5 @@
 from StringIO import StringIO
+import re
 
 from flask import (
     Flask, make_response, request, render_template, redirect, url_for)
@@ -10,13 +11,39 @@ from PIL import Image
 app = Flask(__name__)
 
 
+VINE_ID_PATTERN = re.compile(r'^\w+$')
+VINE_URL_PATTERN = re.compile(r'vine.co/v/(\w+)')
+
+
+def get_vine_id(string):
+    """Get a Vine ID from a string.
+
+    The string could either be a Vine ID already, or a Vine URL.
+    """
+    if VINE_ID_PATTERN.match(string):
+        return string
+
+    match = VINE_URL_PATTERN.search(string)
+    if match:
+        vine_id = match.group(1)
+    else:
+        raise ValueError('%s is not a valid Vine ID or URL.' % string)
+
+    return vine_id
+
+
 @app.route('/')
 def index():
     """Renders a simple form for choosing a Vine and size."""
-    vine_id = request.args.get('vine_id')
+    vine_id_or_url = request.args.get('vine_id')
     size = request.args.get('s')
 
-    if vine_id and size:
+    if vine_id_or_url and size:
+        try:
+            vine_id = get_vine_id(vine_id_or_url)
+        except ValueError:
+            return '%s isn\'t a Vine ID or URL! Try again.' % vine_id_or_url
+
         return redirect(url_for('vine_thumb', vine_id=vine_id, s=size))
 
     return render_template('index.html')
