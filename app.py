@@ -49,6 +49,22 @@ def index():
     return render_template('index.html')
 
 
+def get_vine(vine_id):
+    """Gets a vine!"""
+    response = requests.get('http://vine.co/v/%s' % vine_id)
+
+    if response.status_code != 200:
+        abort(404)
+
+    return response.content
+
+
+def get_thumb_url(vine):
+    """Parses a thumb URL right out of the vine!!!!"""
+    parsed = BeautifulSoup(vine)
+    return parsed.find('meta', itemprop='thumbnailUrl').attrs['content']
+
+
 @app.route('/t/<vine_id>/')
 def vine_thumb(vine_id):
     """Get a Vine video thumbnail.
@@ -56,29 +72,24 @@ def vine_thumb(vine_id):
     Add ?s=SIZE to the URL to specify the maximum width of the thumbnail.
     Vine "poster" images are 480x480.
     """
-    response = requests.get('http://vine.co/v/%s' % vine_id)
-
-    if response.status_code != 200:
-        return 'Whoops!', 404
+    vine = get_vine(vine_id)
 
     try:
         size = (int(request.args.get('s', 480)), 480)
     except ValueError:
         size = (480, 480)
 
-    # Get the poster URL from the <video> tag
-    parsed = BeautifulSoup(response.content)
-    poster_url = parsed.video['poster']
+    thumb_url = get_thumb_url(vine)
 
-    poster_content = StringIO(requests.get(poster_url).content)
-    poster = Image.open(poster_content)
+    thumb_content = StringIO(requests.get(thumb_url).content)
+    thumb = Image.open(thumb_content)
 
     # Resize the poster and save it in a new StringIO
-    poster.thumbnail(size, Image.ANTIALIAS)
-    saved_poster = StringIO()
-    poster.save(saved_poster, 'JPEG')
+    thumb.thumbnail(size, Image.ANTIALIAS)
+    saved_thumb = StringIO()
+    thumb.save(saved_thumb, 'JPEG')
 
-    response = make_response(saved_poster.getvalue())
+    response = make_response(saved_thumb.getvalue())
     response.headers['Content-Type'] = 'image/jpeg'
 
     return response, 200
