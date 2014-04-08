@@ -1,16 +1,14 @@
 language: python
 python: '2.7'
-
 install:
-  - pip install -r requirements.txt
-  - pip install nose
+- pip install -r requirements.txt
+- pip install nose
 script:
-  - nosetests
-
+- nosetests
 deploy:
   provider: heroku
   api_key:
-    secure: aoHFxEGIZINM71e6rVLwZaTxInE3tX2KuoYpKd9iT8JW2Yp0KO8ax7UHVr7tPiiGgAGXKykVw4IHJdePJp0TzTaSg/T+EEZJaZHd05h4XLQVbe1LrZ38yPdU20cllylblKxLh11dN70JBuEuC89Z8BpQ0fDUuEQMOBsIzZeXoAs=
+    secure: f0YFuk6pwtuRzwTZvTJZdg/aSBjy/+sqM9q2OScAkzo2rb6KP58lAzzvPfB6y9I+BDNRU3u9Vayf55+4blM3FMR0VdQfDeZHuGZFdq6mZevOZ6Y9bCHYHH7t84WgDN53mk157KNvwqrgb0STjjtrwlok3KUJ9WKb6hk3JreqsbE=
   app: vine-thumbnails
   on:
     repo: grampajoe/vine-thumbnails
