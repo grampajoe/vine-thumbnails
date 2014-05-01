@@ -8,7 +8,7 @@ script:
 deploy:
   provider: heroku
   api_key:
-    secure: f0YFuk6pwtuRzwTZvTJZdg/aSBjy/+sqM9q2OScAkzo2rb6KP58lAzzvPfB6y9I+BDNRU3u9Vayf55+4blM3FMR0VdQfDeZHuGZFdq6mZevOZ6Y9bCHYHH7t84WgDN53mk157KNvwqrgb0STjjtrwlok3KUJ9WKb6hk3JreqsbE=
+    secure: GYGwBDut7XFMyj6kx83/IvEX4hSntZlROeokLGjqqKQRqOBP2f+n1jmh59UX/f+bYHqMsvm/CGj1k2Prxv7e2fzXf/+k/Th0aabfeG0cV4Ruo1MSo//MwxJyth1GFOte6cwrcYWziwCMCZHtA5297nWh1gzgvJYF6r/MbBfWbNs=
   app: vine-thumbnails
   on:
     repo: grampajoe/vine-thumbnails
