@@ -5,6 +5,7 @@ from flask import (
     Flask, make_response, request, render_template, redirect, url_for)
 import requests
 from bs4 import BeautifulSoup
+import newrelic.agent
 from PIL import Image
 
 
@@ -81,8 +82,16 @@ def vine_thumb(vine_id):
 
     thumb_url = get_thumb_url(vine)
 
-    thumb_content = StringIO(requests.get(thumb_url).content)
-    thumb = Image.open(thumb_content)
+    thumb_response = requests.get(thumb_url)
+
+    # Keep track of original file sizes on NewRelic for fun
+    newrelic.agent.add_custom_parameter(
+        'original_file_size',
+        int(thumb_response.headers.get('content-length', 0)),
+    )
+
+    thumb_file = StringIO(thumb_response.content)
+    thumb = Image.open(thumb_file)
 
     # Resize the poster and save it in a new StringIO
     thumb.thumbnail(size, Image.ANTIALIAS)
