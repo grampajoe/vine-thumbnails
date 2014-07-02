@@ -76,7 +76,6 @@ def get_thumb_url(vine):
     return parsed.find('meta', itemprop='thumbnailUrl').attrs['content']
 
 
-@cache.memoize()
 def make_thumb(vine_id, size):
     """Make a thumbnail and stuff."""
     app.logger.debug('Making %r thumb for %s.' % (size, vine_id))
@@ -104,6 +103,18 @@ def make_thumb(vine_id, size):
     return saved_thumb.getvalue()
 
 
+def make_cached_thumb(vine_id, size):
+    """Returns thumbnail content, maybe from the cache."""
+    key = 'make_thumb-%s-%s' % (vine_id, size)
+    content = cache.get(key)
+
+    if content is None:
+        content = make_thumb(vine_id, size)
+        cache.set(key, content)
+
+    return content
+
+
 @app.route('/t/<vine_id>/')
 def vine_thumb(vine_id):
     """Get a Vine video thumbnail.
@@ -116,7 +127,7 @@ def vine_thumb(vine_id):
     except ValueError:
         size = (480, 480)
 
-    content = make_thumb(vine_id, size)
+    content = make_cached_thumb(vine_id, size)
 
     newrelic.agent.add_custom_parameter(
         'thumb_file_size',
