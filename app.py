@@ -16,9 +16,9 @@ app = Flask(__name__)
 
 cache = Cache(app, config={
     'CACHE_TYPE': os.environ.get('CACHE_TYPE', 'null'),
-    'CACHE_MEMCACHED_SERVERS': os.environ.get('MEMCACHED_CLOUD_SERVERS', '').split(','),
-    'CACHE_MEMCACHED_USERNAME': os.environ.get('MEMCACHED_CLOUD_USERNAME'),
-    'CACHE_MEMCACHED_PASSWORD': os.environ.get('MEMCACHED_CLOUD_PASSWORD'),
+    'CACHE_MEMCACHED_SERVERS': os.environ.get('MEMCACHEDCLOUD_SERVERS', '').split(','),
+    'CACHE_MEMCACHED_USERNAME': os.environ.get('MEMCACHEDCLOUD_USERNAME'),
+    'CACHE_MEMCACHED_PASSWORD': os.environ.get('MEMCACHEDCLOUD_PASSWORD'),
 })
 
 
