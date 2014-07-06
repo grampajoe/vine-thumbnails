@@ -1,3 +1,4 @@
+import logging, logging.config
 import os
 import re
 from StringIO import StringIO
@@ -11,7 +12,29 @@ import newrelic.agent
 from PIL import Image
 
 
-app = Flask(__name__)
+app = Flask('vine_thumbnails')
+app.logger.info('Flask does logging weird.')
+
+
+logging.config.dictConfig({
+    'version': 1,
+    'handlers': {
+        'stream': {
+            'class': 'logging.StreamHandler',
+            'level': logging.DEBUG,
+        },
+    },
+    'loggers': {
+        'vine_thumbnails': {
+            'handlers': ['stream'],
+            'level': logging.INFO,
+        },
+        'flask_cache': {
+            'handlers': ['stream'],
+            'level': logging.INFO,
+        },
+    },
+})
 
 
 cache = Cache(app, config={
