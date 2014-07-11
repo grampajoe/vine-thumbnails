@@ -1,0 +1,10 @@
+{
+  "addons": [
+    "memcachedcloud:25",
+    "newrelic:stark"
+  ],
+  "env": {
+    "CACHE_TYPE": "saslmemcached",
+    "LOG_LEVEL": "DEBUG"
+  }
+}
