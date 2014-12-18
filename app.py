@@ -96,7 +96,8 @@ def get_vine(vine_id):
 def get_thumb_url(vine):
     """Parses a thumb URL right out of the vine!!!!"""
     parsed = BeautifulSoup(vine)
-    return parsed.find('meta', itemprop='thumbnailUrl').attrs['content']
+    thumbDiv = parsed.find('div', itemprop='thumbnail')
+    return thumbDiv.find('meta', itemprop='contentUrl').attrs['content']
 
 
 @cache.memoize()
