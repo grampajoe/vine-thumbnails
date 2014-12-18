@@ -29,11 +29,17 @@ class TestVineThumb(unittest.TestCase):
     <head>
         <title>This is totally real I promise</title>
     </head>
-        <meta itemprop="thumbnailUrl" content="http://vine.co/thumb.jpg" />
+    <body>
+        <div itemprop="thumbnail" itemscope itemtype="http://schema.org/ImageObject">
+            <meta itemprop="contentUrl" content="https://v.cdn.vine.co/r/videos/6D7618B85D1156201499773341696_3a4638806f4.1.3.15817004024158654826.mp4.jpg?versionId=DQtDP01Z6eY9FK.aahGNAlPPCEd85ZWM" />
+        </div>
     </body>
 </html>
         """
 
         url = get_thumb_url(vine)
 
-        self.assertEqual(url, 'http://vine.co/thumb.jpg')
+        self.assertEqual(
+            url,
+            'https://v.cdn.vine.co/r/videos/6D7618B85D1156201499773341696_3a4638806f4.1.3.15817004024158654826.mp4.jpg?versionId=DQtDP01Z6eY9FK.aahGNAlPPCEd85ZWM'
+        )
